@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from DataModel.UserModel import UserModel
 from Database.DatabaseOperations import Database
+import os
+import uvicorn
 
 app = FastAPI()
-db = Database("C:/Users/shrshinde/personalRepos/MicroservicesBasic/Database/curd.db")
+db = Database( os.path.join(os.path.dirname(os.path.abspath(__file__)), "Database\\curd.db"))
 
 # Root endpoint
 @app.get("/")
@@ -19,3 +21,7 @@ async def create_user(user: UserModel):
         return {"message": "User created successfully"}
     except Exception as e:
         return {"error": str(e)}
+
+if __name__ == '__main__':
+   uvicorn.run("main:app", host="localhost", port=8000, reload=True)
+   
