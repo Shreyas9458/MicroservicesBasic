@@ -1,0 +1,22 @@
+name: Branch Name Check
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          if [[ ! "$BRANCH_NAME" =~ ^u\/[a-z0-9._-]+\/(feature|bugfix|hotfix)\/[a-z0-9._-]+$ ]]; then
+            echo "❌ Branch name '$BRANCH_NAME' is invalid."
+            echo "   Allowed formats:"
+            echo "     u/<username>/feature/<description>"
+            echo "     u/<username>/bugfix/<description>"
+            echo "     u/<username>/hotfix/<description>"
+            exit 1
+          fi
